@@ -1,0 +1,15 @@
+{
+  "name": "c2-group",
+  "description": "C2 Group's Claude plugin marketplace",
+  "owner": {
+    "name": "C2 Group"
+  },
+  "plugins": [
+    {
+      "name": "c2-vault",
+      "description": "C2 Group's Obsidian vault standard: onboarding, meeting notes, Gmail triage, dashboard audit & documentation, and skill building.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

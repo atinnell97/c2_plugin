@@ -1,0 +1,10 @@
+{
+  "name": "c2-vault",
+  "displayName": "C2 Vault",
+  "version": "1.0.0",
+  "description": "C2 Group's Obsidian vault standard for Claude: guided onboarding that scaffolds a personal work vault, plus skills for meeting notes, Gmail triage, dashboard auditing and documentation, and building your own skills.",
+  "author": {
+    "name": "C2 Group"
+  },
+  "keywords": ["obsidian", "vault", "knowledge-management", "c2-group"]
+}
