@@ -113,11 +113,14 @@ try {
     $rows = @(
         @("Project", "Example operations program dashboard"),
         @("Scope", "The three-tab page 'Example Operations Dashboard.html': Overview, Team Performance, Data Quality. The separate executive summary page is not covered here."),
-        @("Creation Date", "In production since roughly February 2026. Nightly auto-publish live since about 2026-02-16. [Owner: confirm]"),
-        @("Author / Owner", "Jordan Rivera (owner email). Built and published from the owner's machine. Generator: Documents/dashboards/example_operations/report/regenerate.py"),
-        @("Audience", "The operations team and operations management. The team opens the synced OneDrive copy."),
+        # These four cells are ONE short answer each. No history in Creation
+        # Date, no email or generator path in Author / Owner, no "who opens
+        # which copy" in Audience, no scheduled task name in Update cadence.
+        @("Creation Date", "2026-02-16"),
+        @("Author / Owner", "Jordan Rivera"),
+        @("Audience", "Operations team"),
         @("Live location", "OneDrive - C2 Group/Operations - Shared/04 Reporting/Example Operations Dashboard.html"),
-        @("Update cadence", "Nightly, via the 'Example Dashboard Nightly Regenerate' scheduled task. Every rebuild publishes live. Each tab shows its build time."),
+        @("Update cadence", "Nightly from regenerate.py"),
         # Data sources are a LIST INSIDE ONE CELL: one source per line, its
         # description indented under it, lines joined with [char]11 (a soft
         # line break; a real newline would split the cell).
@@ -141,7 +144,9 @@ try {
 
     # ================= 2. purpose =================
     Add-Para "2. Purpose" "Heading 1"
-    Add-Lead "What it is: " "One self-contained HTML file holding all three operations dashboards. The build script reads the three Excel sources, bakes the data into the page, and copies it to the team's shared folder every night. The page is a snapshot from the build time shown in the header." "List Bullet"
+    # "What it is" is ONE sentence: what kind of page, and how often it
+    # rebuilds. Not which modules it reads, not that it is a build-time snapshot.
+    Add-Lead "What it is: " "One self-contained HTML file holding all three operations dashboards, rebuilt nightly." "List Bullet"
     Add-Lead "What it shows: " "Where every work order stands (due dates, schedule health, stage, ownership), how the team's effort is spent (hours, throughput, QC scores), and whether the source feeds themselves are healthy." "List Bullet"
 
     # ================= 3. tab breakdown =================
@@ -156,7 +161,7 @@ try {
     Add-Lead "What it shows: " "The landing tab. It shows what is due this week and what is late. There are three at-a-glance counters (Open, Due This Week, Late), a card listing this week's due work orders, and a scrolling list of late work orders that have not been closed." "Normal"
     New-Table @(
         @("Metric", "Source", "Logic"),
-        @("Due This Week", "Operations Master: Due Date", "Computed live against the viewer's clock, not the build clock. Excludes work orders already closed. Cancelled and On Hold work orders are excluded from every list on this tab."),
+        @("Due This Week", "Operations Master: Due Date", "Computed live against the viewer's clock, not the build clock. Excludes work orders already closed. Canceled and On Hold work orders are excluded from every list on this tab."),
         @("Late (Not Yet Closed)", "Operations Master: 'Status'", "The master's own 'Late' bucket, refreshed each rebuild. A late work order with no close date stays on the list until it is closed.")
     ) @(4.0, 4.6, 7.6) $true | Out-Null
     After-Table
@@ -168,11 +173,13 @@ try {
 
     # ---- team performance
     Add-TabHeading "Team Performance"
-    Add-Lead "What it shows: " "One row per person (18 people at the audited build), grouped into tables by department: Operations and Support. Each table carries the columns that describe that department's work. A dash means no value exists; a zero is a real zero." "Normal"
+    # No "(18 people at the audited build)": counts taken from the audited
+    # build are stale within a rebuild cycle. Describe the rule, not the reading.
+    Add-Lead "What it shows: " "One row per person, grouped into tables by department: Operations and Support. Each table carries the columns that describe that department's work. A dash means no value exists; a zero is a real zero." "Normal"
     New-Table @(
         @("Metric", "Source", "Logic"),
         @("Orders completed", "Operations Master: Assigned To", "Work orders naming the person and carrying a close date inside the window shown on the page. A person counts once per work order."),
-        @("Open right now", "Operations Master: Assigned To + Status", "Assigned work orders not yet Closed, Cancelled, or On Hold."),
+        @("Open right now", "Operations Master: Assigned To + Status", "Assigned work orders not yet Closed, Canceled, or On Hold."),
         @("Hours logged", "Timesheet Export 'Data' tab", "Hours on order-coded rows only. General time (meetings, travel, training) shows in the profile, not here."),
         @("Hours per day", "Timesheet Export", "Order hours divided by the days the person actually booked order time. Recomputed live when the view is filtered."),
         @("QC score", "Quality Checks + timesheet", "Plain average of QC scores across the work orders the person logged hours to. Blank for Support because the score measures operations work.")
@@ -204,13 +211,17 @@ try {
     # (<Dashboard Name> - Audit.md), including the vault owner's caveat
     # answers. Do not write it from memory.
     Add-Para "4. Validations" "Heading 1"
-    Add-Para "Scope: the full three-tab page, audited 2026-03-20 against the copy built that morning at 06:00:12. All three sources were last modified before the build, so the comparisons used the same data the build used. Method: independent recompute per the validate-live-html skill, meaning fresh code that reads the same sources without calling the generator's own functions." "Normal"
+    # The scope line is ONE sentence: what was audited, and the skill. No build
+    # timestamps, no feed-freshness narrative, no count of figures compared.
+    Add-Para "Scope: The full three-tab page via the validate-live-html skill." "Normal"
     New-Table @(
         @("Validation", "How it was checked", "Result", "By / Date"),
-        @("Source data", "All 3 feeds predate the build. No garbage values in 12,480 timesheet rows or 214 work orders. No volume baseline existed before this audit; this run's counts are recorded as the first.", "PASS. Note: timesheet data ends March 15.", "Claude, 2026-03-20"),
-        @("Calculations", "Every embedded dataset recomputed from the raw sources with independent code: Overview rows (214 work orders x 9 fields), Team Performance (5 measures x 18 people), Data Quality freshness and rejection counts. Everything matches.", "PASS", "Claude, 2026-03-20"),
-        @("Output", "Cross-checks inside and between datasets: Overview counters match their own lists. Team Performance departments, profiles, and monthly sums all tally. The name match between master and timesheet is clean.", "PASS. Rendering (what the browser paints) not verified.", "Claude, 2026-03-20"),
-        @("Human spot check", "Team Performance: 4 values re-derived inside the live workbooks using Excel's own engine (Alvarez 812.25 h; Chen 41 completed; Okafor 12 open; Ito 4.6 QC average). All match the page. The raw master cells behind the other tabs can be checked the same way any time.", "PASS 4/4", "Claude via Excel, at the owner's request, 2026-03-20")
+        @("Source data", "All 3 feeds predate the build. No garbage values in the timesheet rows or work orders.", "PASS. Note: timesheet data ends March 15.", "Claude, 2026-03-20"),
+        @("Calculations", "Every embedded dataset recomputed from the raw sources with independent code. Everything matches.", "PASS", "Claude, 2026-03-20"),
+        @("Output", "Cross-checks inside and between datasets: Overview counters match their own lists. Team Performance departments, profiles, and monthly sums all tally. The name match between master and timesheet is clean.", "PASS.", "Claude, 2026-03-20"),
+        # The Human spot check row is the ONE place specific values belong:
+        # the values checked are the evidence.
+        @("Human spot check", "Team Performance: 4 values re-derived inside the live workbooks using Excel's own engine (Alvarez 812.25 h; Chen 41 completed; Okafor 12 open; Ito 4.6 QC average). All match the page.", "PASS 4/4", "Jordan 3/20/2026")
     ) @(2.6, 7.4, 3.4, 2.8) $true | ForEach-Object {
         for ($r = 2; $r -le 5; $r++) {
             $_.Cell($r, 1).Range.Font.Bold = $true
@@ -218,10 +229,10 @@ try {
         }
     }
     After-Table
-    Add-Lead "Operational note (found 2026-03-20): " "the master's formula cache for the Status column is currently blank because a programmatic save removed the cached values. The build detects this and uses its validated mirror formula, so the numbers on the page are correct. Opening and saving the master in Excel restores the cache." "Normal" $amber
-    Add-Lead "Not covered by this audit: " "what the browser actually paints (all tabs render client-side from the embedded data, and the embedded data is what was verified); per-person QC averages on Team Performance (checked for internal consistency only)." "Normal" $amber
-    Add-Lead "Standing finding: " "only Overview has a permanent validation spec in the generator's repo. The other two tabs are checked only when this audit is re-run. For every-build coverage, add specs through the dashboard-validation skill in the generator's repo." "Normal" $amber
-    Add-Lead "By design, not faults: " "37 timesheet work orders (642 hours) are not on the master and go unused by the page. Support staff showing 0.0 order hours are genuine zeros because their time is general-coded." "Normal" $amber
+    # ONE amber note. Operational note, Not covered by this audit and Standing
+    # finding stay in the audit file and are not carried into the document.
+    # Nothing in this note may also appear in a tab's How to Use: say it once.
+    Add-Lead "By design, not faults: " "some timesheet work orders are not on the master and go unused by the page. Support staff showing 0.0 order hours are genuine zeros because their time is general-coded." "Normal" $amber
 
     # SaveAs fails when the user has the doc open in Word. Catch it, save a
     # (v2) copy beside it, and tell them; swap the copy in after they close

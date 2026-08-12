@@ -102,11 +102,11 @@ try {
     $rows = @(
         @("Project", "[Program or client this HTML belongs to]"),
         @("Scope", "[Which pages/tabs this document covers, and what it does not]"),
-        @("Creation Date", "[When it went into production; when auto-publish went live]"),
-        @("Author / Owner", "[Name (email). Where it is built from. Generator: path/to/build script]"),
-        @("Audience", "[Who opens it and which copy they open]"),
+        @("Creation Date", "[A bare date. No explanation]"),
+        @("Author / Owner", "[Name only]"),
+        @("Audience", "[The group only, e.g. C2 internal / Management / Engineering team]"),
         @("Live location", "[Path to the copy people actually open, written like OneDrive - C2 Group/folder/file.html]"),
-        @("Update cadence", "[How and when it rebuilds; whether every rebuild publishes live]"),
+        @("Update cadence", "[Interval and generator script, e.g. Every 4 hours from high_level.py]"),
         @("Data sources", (@(
             "1)  [folder/source-file-1.xlsx]",
             "      [what it provides]",
@@ -150,12 +150,12 @@ try {
 
     # ================= 4. validations =================
     Add-Para "4. Validations" "Heading 1"
-    Add-Gray "[Scope: which tabs, audited against which build, on what date. Method in one sentence.]" "Normal"
+    Add-Gray "[Scope: <what was audited> via the validate-live-html skill. One sentence, no build timestamps.]" "Normal"
     $tbl = New-Table @(
         @("Validation", "How it was checked", "Result", "By / Date"),
-        @("Source data", "[Feed freshness vs build time, garbage-value scan, row volumes]", "[PASS / FAIL + notes]", "[Who, date]"),
-        @("Calculations", "[What was recomputed independently and from where]", "[PASS / FAIL]", "[Who, date]"),
-        @("Output", "[Internal and cross-dataset consistency checks]", "[PASS / FAIL + what was not verified]", "[Who, date]"),
+        @("Source data", "[Feed freshness and garbage-value scan, in one or two sentences]", "[PASS / FAIL + note]", "[Who, date]"),
+        @("Calculations", "[What was recomputed independently. No dataset inventory]", "[PASS / FAIL]", "[Who, date]"),
+        @("Output", "[Internal and cross-dataset consistency checks]", "[PASS / FAIL]", "[Who, date]"),
         @("Human spot check", "[Which displayed values were checked against which source cells]", "[PASS n/n]", "[Who, date]")
     ) @(2.6, 7.4, 3.4, 2.8) $true
     for ($r = 2; $r -le 5; $r++) {
@@ -163,9 +163,8 @@ try {
         for ($c = 2; $c -le 4; $c++) { Gray-Cell $tbl $r $c }
     }
     After-Table
-    Add-Lead "Operational note: " "[Anything found during the audit that needs action outside the dashboard]" "Normal" $amber
-    Add-Lead "Not covered by this audit: " "[The blind spots, stated plainly]" "Normal" $amber
-    Add-Lead "Standing finding: " "[Anything that should become a permanent every-build check]" "Normal" $amber
+    # One amber note only. Operational note, Not covered and Standing finding
+    # stay in the audit file - they are not carried into the document.
     Add-Lead "By design, not faults: " "[Behaviors that look wrong but are intentional]" "Normal" $amber
 
     $doc.SaveAs([ref]$path)
