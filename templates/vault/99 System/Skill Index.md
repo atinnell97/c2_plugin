@@ -11,8 +11,8 @@ this vault's `.claude/skills/`, created via `c2-make-a-skill`.
   folder → full structure), then runs the onboarding interview: six
   questions, one at a time, folders by approval; generates the first
   Vault Index and offers connectors (Gmail + Google Drive by default,
-  then a menu: Microsoft 365, GitHub, Lucid, DocuSign, QuickBooks,
-  Trello — guided setup, each verified with a real read).
+  then a menu: Microsoft 365, GitHub, QuickBooks, Trello — guided
+  setup, each verified with a real read).
 - **meeting-notes** — turns a meeting transcript/summary (PLAUD txt,
   Gemini docx, paste) into a structured meeting note filed to the right
   project (asks when unsure), extracts action items, and mirrors the

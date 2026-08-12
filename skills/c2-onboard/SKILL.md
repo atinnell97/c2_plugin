@@ -144,10 +144,8 @@ habits, constraints, preferences. Write it into Context.md's last section
    **Tier 2 — one menu question, only after Tier 1:** "C2 also supports
    these, if you use them in your work — want to connect any?
    **Microsoft 365** (SharePoint, OneDrive, Outlook, Teams), **GitHub**
-   (repos, issues, pull requests), **Lucid** (find and summarize your
-   diagrams), **DocuSign** (contract and signature status),
-   **QuickBooks** (books, invoices, reports), **Trello** (boards and
-   cards)." They pick any, none, or all — never
+   (repos, issues, pull requests), **QuickBooks** (books, invoices,
+   reports), **Trello** (boards and cards)." They pick any, none, or all — never
    push; a tool they don't use is a "no" you accept in stride. Anything
    skipped gets one line in the summary: connect later by asking Claude.
 
@@ -163,9 +161,8 @@ habits, constraints, preferences. Write it into Context.md's last section
      "connected; your latest email is from X." Drive: search for any
      file, confirm results. Menu connectors: the equivalent smallest
      read — list/search something (M365: find a file; GitHub: list
-     their repos; Lucid: list a document; DocuSign: envelope status;
-     QuickBooks: company info; Trello: list boards) — and never read
-     anything sensitive aloud.
+     their repos; QuickBooks: company info; Trello: list boards) — and
+     never read anything sensitive aloud.
    - **If it fails or the service says "blocked — ask your admin":**
      say so plainly, tell them this needs IT to approve the connector
      for the company (a one-time admin step), and move on — never
